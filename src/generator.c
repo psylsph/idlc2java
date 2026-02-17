@@ -31,6 +31,8 @@ extern const char *sb_string(const string_builder_t *sb);
 extern int generate_java_record(const idl_struct_t *struct_def, const char *output_dir, const char *prefix, bool disable_cdr, const char *class_name);
 extern int generate_java_enum(const idl_enum_t *enum_def, const char *output_dir, const char *prefix, const char *enum_name);
 extern int generate_java_typedef(const idl_typedef_t *typedef_def, const char *output_dir, const char *prefix);
+extern int generate_java_union(const idl_union_t *union_def, const char *output_dir, const char *prefix, const char *union_name);
+extern int generate_java_bitmask(const idl_bitmask_t *bitmask_def, const char *output_dir, const char *prefix, const char *bitmask_name);
 extern char *resolve_package(const idl_node_t *node, const char *prefix);
 
 typedef struct generator_state {
@@ -65,6 +67,7 @@ static void process_node(idl_node_t *node, generator_state_t *state) {
         }
         
         printf("Found struct: %s\n", struct_name);
+        fflush(stdout);
         
         if (generate_java_record(struct_def, state->output_dir, state->package_prefix, state->disable_cdr, struct_name) != 0) {
             fprintf(stderr, "Error generating struct: %s\n", struct_name);
@@ -85,6 +88,36 @@ static void process_node(idl_node_t *node, generator_state_t *state) {
         
         if (generate_java_enum(enum_def, state->output_dir, state->package_prefix, enum_name) != 0) {
             fprintf(stderr, "Error generating enum: %s\n", enum_name);
+            state->errors++;
+        }
+    }
+    else if (mask & IDL_UNION) {
+        idl_union_t *union_def = (idl_union_t *)node;
+        
+        const char *union_name = "GeneratedUnion";
+        if (union_def->name && union_def->name->identifier) {
+            union_name = union_def->name->identifier;
+        }
+        
+        printf("Found union: %s\n", union_name);
+        
+        if (generate_java_union(union_def, state->output_dir, state->package_prefix, union_name) != 0) {
+            fprintf(stderr, "Error generating union: %s\n", union_name);
+            state->errors++;
+        }
+    }
+    else if (mask & IDL_BITMASK) {
+        idl_bitmask_t *bitmask_def = (idl_bitmask_t *)node;
+        
+        const char *bitmask_name = "GeneratedBitmask";
+        if (bitmask_def->name && bitmask_def->name->identifier) {
+            bitmask_name = bitmask_def->name->identifier;
+        }
+        
+        printf("Found bitmask: %s\n", bitmask_name);
+        
+        if (generate_java_bitmask(bitmask_def, state->output_dir, state->package_prefix, bitmask_name) != 0) {
+            fprintf(stderr, "Error generating bitmask: %s\n", bitmask_name);
             state->errors++;
         }
     }

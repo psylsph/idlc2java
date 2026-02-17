@@ -21,7 +21,6 @@ set(PLUGIN_SOURCES
     src/java_generator.c
     src/java_type.c
     src/java_record.c
-    src/java_cdr.c
     src/package_resolver.c
     src/annotation.c
     src/string_builder.c

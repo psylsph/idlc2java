@@ -43,9 +43,9 @@ int generate_types_for_module(const idl_module_t *module, const char *output_dir
         } else if (mask & IDL_ENUM) {
             count++;
         } else if (mask & IDL_UNION) {
-            // TODO: Generate union
+            count++;
         } else if (mask & IDL_BITMASK) {
-            // TODO: Generate bitmask
+            count++;
         } else if (mask & IDL_MODULE) {
             count += generate_types_for_module((const idl_module_t *)def, output_dir, prefix);
         }

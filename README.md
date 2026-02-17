@@ -209,10 +209,10 @@ Contributions are welcome! Please ensure:
 
 ## TODO
 
-- [ ] Complete union generation
-- [ ] Complete bitmask generation
-- [ ] Add support for arrays
-- [ ] Implement full CDR serialization
+- [x] Complete union generation
+- [x] Complete bitmask generation
+- [x] Add support for arrays
+- [x] Implement full CDR serialization
 - [ ] Add unit tests for CDR encoding/decoding
 - [ ] Support for bounded sequences
 - [ ] Support for fixed-point types

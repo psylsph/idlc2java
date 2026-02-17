@@ -1,0 +1,64 @@
+module CommonTypedefs {
+    typedef octet ByteType;
+    typedef long IntType;
+    typedef unsigned long UIntType;
+    typedef long long LLongType;
+    typedef unsigned long long ULLongType;
+    typedef float FloatType;
+    typedef double DoubleType;
+    typedef string IdentifierType;
+    typedef sequence<long> LongArrayType;
+};
+
+module CommonEnums {
+    enum StatusCode {
+        STATUS_OK,
+        STATUS_ERROR,
+        STATUS_WARNING
+    };
+};
+
+module CommonStructs {
+    struct BaseStruct {
+        long id;
+        string name;
+    };
+    
+    struct ExtendedStruct : BaseStruct {
+        long extraField;
+        double value;
+    };
+    
+    struct FinalStruct : ExtendedStruct {
+        string description;
+    };
+};
+
+module CommonUnions {
+    enum BaseKind {
+        KIND_A,
+        KIND_B,
+        KIND_C
+    };
+    
+    union BaseUnion switch (BaseKind) {
+        case KIND_A: long valueA;
+        case KIND_B: string valueB;
+        case KIND_C: double valueC;
+    };
+    
+    union ExtendedUnion switch (BaseKind) {
+        case KIND_A: long valueA;
+        case KIND_B: string valueB;
+        default: double defaultValue;
+    };
+};
+
+module CommonTypedefs2 {
+    typedef CommonStructs::BaseStruct BaseStructAlias;
+    typedef CommonStructs::ExtendedStruct ExtendedStructAlias;
+    typedef CommonUnions::BaseUnion BaseUnionAlias;
+    typedef string URI;
+    typedef string URL;
+    typedef unsigned long long DateTime;
+};

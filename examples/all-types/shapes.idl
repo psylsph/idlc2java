@@ -17,11 +17,30 @@ module Shapes {
         sequence<double> points;
     };
     
+    // Use typedef from another module
+    struct TypedefCircle {
+        @key CommonTypedefs2::BaseStructAlias id;
+        Circle circle;
+        CommonTypedefs2::URI href;
+        CommonTypedefs2::DateTime timestamp;
+    };
+    
+    // Use inheritance from another module
+    struct ExtendedCircle : Circle {
+        string label;
+        CommonTypedefs::IdentifierType identifier;
+    };
+    
     struct Rectangle {
         @key long id;
         Point top_left;
         Point bottom_right;
         string label;
+    };
+    
+    // Use nested inheritance
+    struct FinalCircle : CommonStructs::FinalStruct {
+        Circle circle;
     };
     
     enum ShapeType {
@@ -34,5 +53,11 @@ module Shapes {
         case CIRCLE_TYPE: Circle circle;
         case RECTANGLE_TYPE: Rectangle rectangle;
         default: string description;
+    };
+    
+    // Use union typedef from another module
+    struct UnionHolder {
+        CommonTypedefs2::BaseUnionAlias unionField;
+        CommonUnions::ExtendedUnion extendedUnion;
     };
 };

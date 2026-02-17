@@ -28,10 +28,20 @@ extern char *resolve_package(const idl_node_t *node, const char *prefix);
 
 char *java_type_name(const idl_type_spec_t *type_spec, bool boxed) {
     if (!type_spec) return strdup("Object");
-    
-    idl_mask_t mask = idl_mask(type_spec);
-    
-    switch (mask) {
+
+    idl_type_t type = idl_type(type_spec);
+
+    // Handle typedef by returning the typedef name
+    if (type == IDL_TYPEDEF) {
+        // For typedefs from other modules, use idl_name() which works across module boundaries
+        const idl_name_t *type_name = idl_name(type_spec);
+        if (type_name && type_name->identifier) {
+            return strdup(type_name->identifier);
+        }
+        return strdup("Object");
+    }
+
+    switch (type) {
         case IDL_BOOL:
             return strdup(boxed ? "Boolean" : "boolean");
         case IDL_OCTET:
@@ -70,13 +80,14 @@ char *java_type_name(const idl_type_spec_t *type_spec, bool boxed) {
         case IDL_ENUM:
         case IDL_BITMASK: {
             const idl_name_t *name = NULL;
-            if (mask & IDL_STRUCT) {
+            idl_mask_t type_mask = idl_mask(type_spec);
+            if (type_mask & IDL_STRUCT) {
                 name = ((const idl_struct_t *)type_spec)->name;
-            } else if (mask & IDL_UNION) {
+            } else if (type_mask & IDL_UNION) {
                 name = ((const idl_union_t *)type_spec)->name;
-            } else if (mask & IDL_ENUM) {
+            } else if (type_mask & IDL_ENUM) {
                 name = ((const idl_enum_t *)type_spec)->name;
-            } else if (mask & IDL_BITMASK) {
+            } else if (type_mask & IDL_BITMASK) {
                 name = ((const idl_bitmask_t *)type_spec)->name;
             }
             if (name && name->identifier) {

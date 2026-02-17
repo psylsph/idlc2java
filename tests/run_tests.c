@@ -17,27 +17,31 @@
 
 #define TEST_IDLC "/opt/cyclonedds/bin/idlc"
 #define TEST_PLUGIN_DIR "/home/stuart/repos/idlc2java/build"
+#define TEST_EXAMPLES_DIR "/home/stuart/repos/idlc2java/examples"
 #define TEST_OUTPUT_DIR "/tmp/idlc_java_test"
 
 int run_command(const char *command, const char *output_file) {
+    fprintf(stderr, "DEBUG: Running command: %s\n", command);
     FILE *fp = popen(command, "r");
     if (!fp) {
         fprintf(stderr, "Failed to run command: %s\n", command);
         return -1;
     }
     
-    if (output_file) {
-        FILE *out = fopen(output_file, "w");
-        if (out) {
-            char buffer[1024];
-            while (fgets(buffer, sizeof(buffer), fp)) {
-                fputs(buffer, out);
-            }
-            fclose(out);
-        }
+    // Read all output to avoid pipe issues
+    char buffer[4096];
+    size_t n;
+    while ((n = fread(buffer, 1, sizeof(buffer)-1, fp)) > 0) {
+        buffer[n] = '\0';
+        fprintf(stderr, "OUTPUT: %s", buffer);
     }
     
     int status = pclose(fp);
+    fprintf(stderr, "DEBUG: Command exited with status: %d (WIFEXITED=%d, WIFSIGNALED=%d)\n", 
+            status, WIFEXITED(status), WIFSIGNALED(status));
+    if (WIFSIGNALED(status)) {
+        fprintf(stderr, "DEBUG: Signal number: %d\n", WTERMSIG(status));
+    }
     return WEXITSTATUS(status);
 }
 
@@ -46,9 +50,10 @@ int test_plugin_loading(void) {
     
     char command[512];
     snprintf(command, sizeof(command), 
-        "LD_LIBRARY_PATH=%s %s -l java --help 2>&1",
+        "LD_LIBRARY_PATH=%s %s -l java -o /tmp/test_plugin_check %s/shapes.idl 2>&1",
         TEST_PLUGIN_DIR,
-        TEST_IDLC);
+        TEST_IDLC,
+        TEST_EXAMPLES_DIR);
     
     int result = run_command(command, NULL);
     
@@ -66,10 +71,11 @@ int test_basic_generation(void) {
     
     char command[1024];
     snprintf(command, sizeof(command),
-        "LD_LIBRARY_PATH=%s %s -l java -o %s ../examples/shapes.idl 2>&1",
+        "LD_LIBRARY_PATH=%s %s -l java -o %s %s/shapes.idl 2>&1",
         TEST_PLUGIN_DIR,
         TEST_IDLC,
-        TEST_OUTPUT_DIR);
+        TEST_OUTPUT_DIR,
+        TEST_EXAMPLES_DIR);
     
     int result = run_command(command, NULL);
     
