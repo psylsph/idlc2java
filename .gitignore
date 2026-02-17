@@ -69,3 +69,4 @@ examples/**
 !examples/shapes.idl
 !examples/common_types.idl
 test_plugin.sh
+.opencode

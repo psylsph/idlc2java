@@ -175,7 +175,28 @@ Or manually:
 
 ## License
 
-This plugin follows the same license as CycloneDDS (Eclipse Public License 2.0).
+This project is licensed under the **Eclipse Public License 2.0 (EPL-2.0)**.
+
+### Why EPL-2.0?
+
+This plugin is a derivative work of CycloneDDS, which is licensed under EPL-2.0. The plugin:
+- Links against CycloneDDS libraries (`libddsc.so`)
+- Uses CycloneDDS header files (`idlc/generator.h`, `idl/processor.h`, `idl/tree.h`, etc.)
+- Implements the CycloneDDS plugin API (`generate()` function)
+
+Under EPL-2.0, derivative works must be distributed under the same license. This ensures:
+- ✅ Commercial use is permitted
+- ✅ Modifications must be shared back to the community
+- ✅ Source code must be made available
+- ✅ Compatible with business use cases (unlike GPL)
+
+### Third-Party Components
+
+| Component | License | Usage |
+|-----------|---------|-------|
+| CycloneDDS | EPL-2.0 / EDL-1.0 | IDL compiler and runtime libraries |
+
+See the [LICENSE](LICENSE) file for the full license text.
 
 ## Contributing
 
