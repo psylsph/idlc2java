@@ -1,0 +1,38 @@
+// Simplified IDL Test File for CycloneDDS
+
+#include "common_types.idl"
+
+module Shapes {
+    
+    struct Point {
+        @key long x;
+        @key long y;
+    };
+    
+    struct Circle {
+        @key long id;
+        Point center;
+        double radius;
+        string color;
+        sequence<double> points;
+    };
+    
+    struct Rectangle {
+        @key long id;
+        Point top_left;
+        Point bottom_right;
+        string label;
+    };
+    
+    enum ShapeType {
+        CIRCLE_TYPE,
+        RECTANGLE_TYPE,
+        TRIANGLE_TYPE
+    };
+    
+    union ShapeValue switch (ShapeType) {
+        case CIRCLE_TYPE: Circle circle;
+        case RECTANGLE_TYPE: Rectangle rectangle;
+        default: string description;
+    };
+};
