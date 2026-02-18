@@ -40,7 +40,19 @@ represent, as a whole, an original work of authorship.
 
 "Modified Works" shall mean any work in Source Code or other form that
 results from an addition to, deletion from, or modification of the
-contents of the Program.
+contents of the Program, including, for purposes of clarity any new file
+in Source Code form that contains any contents of the Program. Modified
+Works shall not include works that contain only declarations,
+interfaces, types, classes, structures, or files of the Program solely
+in each case in order to link to, bind by name, or subclass the Program
+or Modified Works thereof.
+
+"Distribute" means the acts of a) distributing or b) making available
+in any manner that enables the transfer of a copy.
+
+"Source Code" means the form of a Program preferred for making
+modifications, including but not limited to software source code,
+documentation source, and configuration files.
 
 "Secondary License" means either the GNU General Public License,
 Version 2.0, or any later versions of that license, including any
@@ -73,16 +85,23 @@ Contributor.
   patent or other intellectual property rights of any other entity.
   Each Contributor disclaims any liability to Recipient for claims
   brought by any other entity based on infringement of intellectual
-  property rights or otherwise. As a condition to exercising the rights
-  and licenses granted hereunder, each Recipient hereby assumes sole
-  responsibility to secure any other intellectual property rights needed,
-  if any. For example, if a third party patent license is required to
-  allow Recipient to Distribute the Program, it is Recipient's
-  responsibility to acquire that license before distributing the Program.
+  property rights or otherwise. As a condition to exercising the
+  rights and licenses granted hereunder, each Recipient hereby
+  assumes sole responsibility to secure any other intellectual
+  property rights needed, if any. For example, if a third party
+  patent license is required to allow Recipient to Distribute the
+  Program, it is Recipient's responsibility to acquire that license
+  before distributing the Program.
 
-  d) Each Contributor represents that to its knowledge it has sufficient
-  copyright rights in its Contribution, if any, to grant the copyright
-  license set forth in this Agreement.
+  d) Each Contributor represents that to its knowledge it has
+  sufficient copyright rights in its Contribution, if any, to grant
+  the copyright license set forth in this Agreement.
+
+  e) Notwithstanding the terms of any Secondary License, no
+  Contributor makes additional grants to any Recipient (other than
+  those set forth in this Agreement) as a result of such Recipient's
+  receipt of the Program under the terms of a Secondary License
+  (if permitted under the terms of Section 3).
 
 3. REQUIREMENTS
 
@@ -96,12 +115,41 @@ Contributor.
   used for software exchange; and
 
   b) the Contributor may Distribute the Program under a license
-  different than this Agreement, provided that such license is a
-  Secondary License.
+  different than this Agreement, provided that such license:
+     i) effectively disclaims on behalf of all other Contributors all
+     warranties and conditions, express and implied, including
+     warranties or conditions of title and non-infringement, and
+     implied warranties or conditions of merchantability and fitness
+     for a particular purpose;
 
-3.2 Source Code may be made available under this Agreement for a
-fee, provided that the fee is not greater than the cost of physically
-distributing the Source Code.
+     ii) effectively excludes on behalf of all other Contributors all
+     liability for damages, including direct, indirect, special,
+     incidental and consequential damages, such as lost profits;
+
+     iii) does not attempt to limit or alter the recipients' rights
+     in the Source Code under section 3.2; and
+
+     iv) requires any subsequent distribution of the Program by any
+     party to be under a license that satisfies the requirements
+     of this section 3.
+
+3.2 When the Program is Distributed as Source Code:
+
+  a) it must be made available under this Agreement, or if the
+  Program (i) is combined with other material in a separate file or
+  files made available under a Secondary License, and (ii) the initial
+  Contributor attached to the Source Code the notice described in
+  Exhibit A of this Agreement, then the Program may be made available
+  under the terms of such Secondary Licenses, and
+
+  b) a copy of this Agreement must be included with each copy of
+  the Program.
+
+3.3 Contributors may not remove or alter any copyright, patent,
+trademark, attribution notices, disclaimers of warranty, or limitations
+of liability ("notices") contained within the Program from any copy of
+the Program which they Distribute, provided that Contributors may add
+their own appropriate notices.
 
 4. COMMERCIAL DISTRIBUTION
 
@@ -126,6 +174,17 @@ writing of such claim, and b) allow the Commercial Contributor to control,
 and cooperate with the Commercial Contributor in, the defense and any
 related settlement negotiations. The Indemnified Contributor may
 participate in any such claim at its own expense.
+
+For example, a Contributor might include the Program in a commercial
+product offering, Product X. That Contributor is then a Commercial
+Contributor. If that Commercial Contributor then makes performance
+claims, or offers warranties related to Product X, those performance
+claims and warranties are such Commercial Contributor's responsibility
+alone. Under this section, the Commercial Contributor would have to
+defend claims against the other Contributors related to those performance
+claims and warranties, and if a court requires any other Contributor to
+pay any damages as a result, the Commercial Contributor must pay
+those damages.
 
 5. NO WARRANTY
 
@@ -157,25 +216,25 @@ POSSIBILITY OF SUCH DAMAGES.
 
 If any provision of this Agreement is invalid or unenforceable under
 applicable law, it shall not affect the validity or enforceability of
-the remainder of the terms of this Agreement, and without further action
-by the parties hereto, such provision shall be reformed to the minimum
-extent necessary to make such provision valid and enforceable.
+the remainder of the terms of this Agreement, and without further
+action by the parties hereto, such provision shall be reformed to the
+minimum extent necessary to make such provision valid and enforceable.
 
-If Recipient institutes patent litigation against any entity (including
-a cross-claim or counterclaim in a lawsuit) alleging that the Program
-itself (excluding combinations of the Program with other software or
-hardware) infringes such Recipient's patent(s), then such Recipient's
+If Recipient institutes patent litigation against any entity
+(including a cross-claim or counterclaim in a lawsuit) alleging that the
+Program itself (excluding combinations of the Program with other software
+or hardware) infringes such Recipient's patent(s), then such Recipient's
 rights granted under Section 2(b) shall terminate as of the date such
 litigation is filed.
 
-All Recipient's rights under this Agreement shall terminate if it fails
-to comply with any of the material terms or conditions of this Agreement
-and does not cure such failure in a reasonable period of time after
-becoming aware of such noncompliance. If all Recipient's rights under
-this Agreement terminate, Recipient agrees to cease use and distribution
-of the Program as soon as reasonably practicable. However, Recipient's
-obligations under this Agreement and any licenses granted by Recipient
-relating to the Program shall continue and survive.
+All Recipient's rights under this Agreement shall terminate if it
+fails to comply with any of the material terms or conditions of this
+Agreement and does not cure such failure in a reasonable period of
+time after becoming aware of such noncompliance. If all Recipient's
+rights under this Agreement terminate, Recipient agrees to cease use
+and distribution of the Program as soon as reasonably practicable.
+However, Recipient's obligations under this Agreement and any licenses
+granted by Recipient relating to the Program shall continue and survive.
 
 Everyone is permitted to copy and distribute copies of this Agreement,
 but in order to avoid inconsistency the Agreement is copyrighted and
@@ -200,9 +259,19 @@ under this Agreement are reserved. Nothing in this Agreement is intended
 to be enforceable by any entity that is not a Contributor or Recipient.
 No third-party beneficiary rights are created under this Agreement.
 
-EXHIBIT A - FORM OF SECONDARY LICENSES NOTICE
+Exhibit A - Form of Secondary Licenses Notice
 
-"This Source Code may also be made available under the following 
-Secondary Licenses when the conditions for such availability set forth 
+"This Source Code may also be made available under the following
+Secondary Licenses when the conditions for such availability set forth
 in the Eclipse Public License, v. 2.0 are satisfied: {name license(s),
 version(s), and exceptions or additional permissions here}."
+
+  Simply including a copy of this Agreement, including this Exhibit A
+  is not sufficient to license the Source Code under Secondary Licenses.
+
+  If it is not possible or desirable to put the notice in a particular
+  file, then You may include the notice in a location (such as a LICENSE
+  file in a relevant directory) where a recipient would be likely to
+  look for such a notice.
+
+  You may add additional accurate notices of copyright ownership.
