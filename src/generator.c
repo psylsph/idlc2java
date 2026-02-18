@@ -59,6 +59,10 @@ static void process_node(idl_node_t *node, generator_state_t *state) {
     
     if (mask & IDL_STRUCT) {
         idl_struct_t *struct_def = (idl_struct_t *)node;
+        
+        // Validate struct_def is accessible
+        if (!struct_def) return;
+        
         state->struct_count++;
         
         const char *struct_name = "GeneratedStruct";
@@ -69,13 +73,17 @@ static void process_node(idl_node_t *node, generator_state_t *state) {
         printf("Found struct: %s\n", struct_name);
         fflush(stdout);
         
-        if (generate_java_record(struct_def, state->output_dir, state->package_prefix, state->disable_cdr, struct_name) != 0) {
+        int result = generate_java_record(struct_def, state->output_dir, state->package_prefix, state->disable_cdr, struct_name);
+        if (result != 0) {
             fprintf(stderr, "Error generating struct: %s\n", struct_name);
             state->errors++;
         }
     }
     else if (mask & IDL_ENUM) {
         idl_enum_t *enum_def = (idl_enum_t *)node;
+        
+        // Validate enum_def is accessible  
+        if (!enum_def) return;
         
         state->enum_count++;
         

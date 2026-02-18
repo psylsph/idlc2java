@@ -7,7 +7,12 @@ module CommonTypedefs {
     typedef float FloatType;
     typedef double DoubleType;
     typedef string IdentifierType;
+    typedef string URI;
     typedef sequence<long> LongArrayType;
+    
+    // Bounded sequence typedefs
+    typedef sequence<char, 256> ShortString;
+    typedef sequence<octet, 1024> ByteBuffer;
 };
 
 module CommonEnums {
@@ -15,6 +20,14 @@ module CommonEnums {
         STATUS_OK,
         STATUS_ERROR,
         STATUS_WARNING
+    };
+    
+    // Bitmask example
+    bitmask Flags {
+        FLAG_READ,
+        FLAG_WRITE,
+        FLAG_EXECUTE,
+        FLAG_HIDDEN
     };
 };
 
@@ -31,6 +44,29 @@ module CommonStructs {
     
     struct FinalStruct : ExtendedStruct {
         string description;
+    };
+    
+    // Struct with all primitive types
+    struct AllPrimitives {
+        boolean boolVal;
+        octet byteVal;
+        char charVal;
+        short shortVal;
+        unsigned short ushortVal;
+        long longVal;
+        unsigned long ulongVal;
+        long long llongVal;
+        unsigned long long ullongVal;
+        float floatVal;
+        double doubleVal;
+        string stringVal;
+    };
+    
+    // Struct with sequence fields
+    struct ContainerStruct {
+        sequence<long> intList;
+        sequence<string> stringList;
+        sequence<BaseStruct> structList;
     };
 };
 
@@ -52,6 +88,13 @@ module CommonUnions {
         case KIND_B: string valueB;
         default: double defaultValue;
     };
+    
+    // Union with integer discriminator
+    union IntDiscrimUnion switch (long) {
+        case 1: string text;
+        case 2: long number;
+        default: double decimal;
+    };
 };
 
 module CommonTypedefs2 {
@@ -61,4 +104,8 @@ module CommonTypedefs2 {
     typedef string URI;
     typedef string URL;
     typedef unsigned long long DateTime;
+    
+    // Typedef of sequence
+    typedef sequence<CommonStructs::BaseStruct, 100> BaseStructList;
+    typedef sequence<CommonUnions::BaseUnion> UnionList;
 };

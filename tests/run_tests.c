@@ -1,12 +1,7 @@
 /*
  * Copyright (c) 2024 IDLC Java Generator Contributors
  *
- * This program and the accompanying materials are made available under the
- * terms of the Eclipse Public License 2.0 which is available at
- * http://www.eclipse.org/legal/epl-2.0, or the Eclipse Distribution License 1.0
- * which is available at http://www.eclipse.org/org/documents/edl-v10.php.
- *
- * SPDX-License-Identifier: EPL-2.0 OR BSD-3-Clause
+ * Test suite for IDL to Java Generator
  */
 
 #include <stdio.h>
@@ -18,9 +13,8 @@
 #define TEST_IDLC "/opt/cyclonedds/bin/idlc"
 #define TEST_PLUGIN_DIR "/home/stuart/repos/idlc2java/build"
 #define TEST_EXAMPLES_DIR "/home/stuart/repos/idlc2java/examples"
-#define TEST_OUTPUT_DIR "/tmp/idlc_java_test"
 
-int run_command(const char *command, const char *output_file) {
+int run_command(const char *command) {
     fprintf(stderr, "DEBUG: Running command: %s\n", command);
     FILE *fp = popen(command, "r");
     if (!fp) {
@@ -28,7 +22,6 @@ int run_command(const char *command, const char *output_file) {
         return -1;
     }
     
-    // Read all output to avoid pipe issues
     char buffer[4096];
     size_t n;
     while ((n = fread(buffer, 1, sizeof(buffer)-1, fp)) > 0) {
@@ -37,12 +30,13 @@ int run_command(const char *command, const char *output_file) {
     }
     
     int status = pclose(fp);
+    int exit_code = WEXITSTATUS(status);
     fprintf(stderr, "DEBUG: Command exited with status: %d (WIFEXITED=%d, WIFSIGNALED=%d)\n", 
-            status, WIFEXITED(status), WIFSIGNALED(status));
+            exit_code, WIFEXITED(status), WIFSIGNALED(status));
     if (WIFSIGNALED(status)) {
         fprintf(stderr, "DEBUG: Signal number: %d\n", WTERMSIG(status));
     }
-    return WEXITSTATUS(status);
+    return exit_code;
 }
 
 int test_plugin_loading(void) {
@@ -50,12 +44,13 @@ int test_plugin_loading(void) {
     
     char command[512];
     snprintf(command, sizeof(command), 
-        "LD_LIBRARY_PATH=%s %s -l java -o /tmp/test_plugin_check %s/shapes.idl 2>&1",
+        "LD_LIBRARY_PATH=%s %s -l java -o /tmp/test_plugin_check -I %s/all-types %s/all-types/shapes.idl 2>&1",
         TEST_PLUGIN_DIR,
         TEST_IDLC,
+        TEST_EXAMPLES_DIR,
         TEST_EXAMPLES_DIR);
     
-    int result = run_command(command, NULL);
+    int result = run_command(command);
     
     if (result == 0) {
         printf("✓ Plugin loaded successfully\n");
@@ -67,28 +62,153 @@ int test_plugin_loading(void) {
 }
 
 int test_basic_generation(void) {
-    printf("\n=== Test: Basic Generation ===\n");
+    printf("\n=== Test: Basic Generation (shapes.idl) ===\n");
     
     char command[1024];
     snprintf(command, sizeof(command),
-        "LD_LIBRARY_PATH=%s %s -l java -o %s %s/shapes.idl 2>&1",
+        "LD_LIBRARY_PATH=%s %s -l java -o /tmp/idlc_java_test -I %s/all-types %s/all-types/shapes.idl 2>&1",
         TEST_PLUGIN_DIR,
         TEST_IDLC,
-        TEST_OUTPUT_DIR,
+        TEST_EXAMPLES_DIR,
         TEST_EXAMPLES_DIR);
     
-    int result = run_command(command, NULL);
+    int result = run_command(command);
     
     if (result == 0) {
         printf("✓ Code generation succeeded\n");
-        
-        char check_cmd[512];
-        snprintf(check_cmd, sizeof(check_cmd),
-            "ls -R %s 2>&1 | head -20",
-            TEST_OUTPUT_DIR);
-        system(check_cmd);
     } else {
         printf("✗ Code generation failed (exit code: %d)\n", result);
+    }
+    
+    return result == 0 ? 0 : -1;
+}
+
+int test_common_types(void) {
+    printf("\n=== Test: Common Types Generation ===\n");
+    
+    char command[1024];
+    snprintf(command, sizeof(command),
+        "LD_LIBRARY_PATH=%s %s -DDDS_XTYPES -l java -o /tmp/test_common_types -I %s/all-types %s/all-types/common_types.idl 2>&1",
+        TEST_PLUGIN_DIR,
+        TEST_IDLC,
+        TEST_EXAMPLES_DIR,
+        TEST_EXAMPLES_DIR);
+    
+    int result = run_command(command);
+    
+    if (result == 0) {
+        printf("✓ Common types generation succeeded\n");
+    } else {
+        printf("✗ Common types generation failed (exit code: %d)\n", result);
+    }
+    
+    return result == 0 ? 0 : -1;
+}
+
+int test_util_idl(void) {
+    printf("\n=== Test: Util IDL Generation ===\n");
+    
+    char command[1024];
+    snprintf(command, sizeof(command),
+        "LD_LIBRARY_PATH=%s %s -DDDS_XTYPES -l java -o /tmp/test_util_idl %s/tex/Util.idl 2>&1",
+        TEST_PLUGIN_DIR,
+        TEST_IDLC,
+        TEST_EXAMPLES_DIR);
+    
+    int result = run_command(command);
+    
+    if (result == 0) {
+        printf("✓ Util IDL generation succeeded\n");
+    } else {
+        printf("✗ Util IDL generation failed (exit code: %d)\n", result);
+    }
+    
+    return result == 0 ? 0 : -1;
+}
+
+int test_struct_with_primitives(void) {
+    printf("\n=== Test: Struct with All Primitives ===\n");
+    
+    char command[1024];
+    snprintf(command, sizeof(command),
+        "LD_LIBRARY_PATH=%s %s -l java -o /tmp/test_primitives -I %s/all-types %s/all-types/shapes.idl 2>&1 | grep -c 'PrimitiveStruct'",
+        TEST_PLUGIN_DIR,
+        TEST_IDLC,
+        TEST_EXAMPLES_DIR,
+        TEST_EXAMPLES_DIR);
+    
+    int result = run_command(command);
+    
+    if (result == 0) {
+        printf("✓ Primitive struct generation succeeded\n");
+    } else {
+        printf("✗ Primitive struct generation failed (exit code: %d)\n", result);
+    }
+    
+    return result == 0 ? 0 : -1;
+}
+
+int test_union_generation(void) {
+    printf("\n=== Test: Union Generation ===\n");
+    
+    char command[1024];
+    snprintf(command, sizeof(command),
+        "LD_LIBRARY_PATH=%s %s -l java -o /tmp/test_union -I %s/all-types %s/all-types/shapes.idl 2>&1 | grep -c 'ShapeValue'",
+        TEST_PLUGIN_DIR,
+        TEST_IDLC,
+        TEST_EXAMPLES_DIR,
+        TEST_EXAMPLES_DIR);
+    
+    int result = run_command(command);
+    
+    if (result == 0) {
+        printf("✓ Union generation succeeded\n");
+    } else {
+        printf("✗ Union generation failed (exit code: %d)\n", result);
+    }
+    
+    return result == 0 ? 0 : -1;
+}
+
+int test_enum_generation(void) {
+    printf("\n=== Test: Enum Generation ===\n");
+    
+    char command[1024];
+    snprintf(command, sizeof(command),
+        "LD_LIBRARY_PATH=%s %s -l java -o /tmp/test_enum -I %s/all-types %s/all-types/shapes.idl 2>&1 | grep -c 'ShapeType'",
+        TEST_PLUGIN_DIR,
+        TEST_IDLC,
+        TEST_EXAMPLES_DIR,
+        TEST_EXAMPLES_DIR);
+    
+    int result = run_command(command);
+    
+    if (result == 0) {
+        printf("✓ Enum generation succeeded\n");
+    } else {
+        printf("✗ Enum generation failed (exit code: %d)\n", result);
+    }
+    
+    return result == 0 ? 0 : -1;
+}
+
+int test_bitmask_generation(void) {
+    printf("\n=== Test: Bitmask Generation ===\n");
+    
+    char command[1024];
+    snprintf(command, sizeof(command),
+        "LD_LIBRARY_PATH=%s %s -l java -o /tmp/test_bitmask -I %s/all-types %s/all-types/shapes.idl 2>&1 | grep -c 'Flags'",
+        TEST_PLUGIN_DIR,
+        TEST_IDLC,
+        TEST_EXAMPLES_DIR,
+        TEST_EXAMPLES_DIR);
+    
+    int result = run_command(command);
+    
+    if (result == 0) {
+        printf("✓ Bitmask generation succeeded\n");
+    } else {
+        printf("✗ Bitmask generation failed (exit code: %d)\n", result);
     }
     
     return result == 0 ? 0 : -1;
@@ -102,6 +222,12 @@ int main(int argc, char *argv[]) {
     
     if (test_plugin_loading() != 0) failed++;
     if (test_basic_generation() != 0) failed++;
+    if (test_common_types() != 0) failed++;
+    if (test_util_idl() != 0) failed++;
+    if (test_struct_with_primitives() != 0) failed++;
+    if (test_union_generation() != 0) failed++;
+    if (test_enum_generation() != 0) failed++;
+    if (test_bitmask_generation() != 0) failed++;
     
     printf("\n=== Test Summary ===\n");
     if (failed == 0) {

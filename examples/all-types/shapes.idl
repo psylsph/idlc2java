@@ -1,20 +1,60 @@
-// Simplified IDL Test File for CycloneDDS
+// Comprehensive IDL Test File for CycloneDDS Java Generator
 
 #include "common_types.idl"
 
 module Shapes {
     
+    // Basic struct
     struct Point {
         @key long x;
         @key long y;
     };
     
+    // Struct with all primitive types
+    struct PrimitiveStruct {
+        boolean boolVal;
+        octet byteVal;
+        char charVal;
+        short shortVal;
+        unsigned short ushortVal;
+        long longVal;
+        unsigned long ulongVal;
+        long long llongVal;
+        unsigned long long ullongVal;
+        float floatVal;
+        double doubleVal;
+        string stringVal;
+    };
+    
+    // Struct with sequences
+    struct SequenceStruct {
+        sequence<long> intList;
+        sequence<string> stringList;
+        sequence<Point> pointList;
+    };
+    
+    // Struct with typedef fields (from other modules)
+    struct TypedefStruct {
+        CommonTypedefs::ByteType byteVal;
+        CommonTypedefs::IntType intVal;
+        CommonTypedefs::URI uriVal;
+        CommonTypedefs2::BaseStructList structList;
+    };
+    
+    // Basic struct with nested structs
     struct Circle {
         @key long id;
         Point center;
         double radius;
         string color;
         sequence<double> points;
+    };
+    
+    struct Rectangle {
+        @key long id;
+        Point top_left;
+        Point bottom_right;
+        string label;
     };
     
     // Use typedef from another module
@@ -31,27 +71,29 @@ module Shapes {
         CommonTypedefs::IdentifierType identifier;
     };
     
-    struct Rectangle {
-        @key long id;
-        Point top_left;
-        Point bottom_right;
-        string label;
-    };
-    
     // Use nested inheritance
     struct FinalCircle : CommonStructs::FinalStruct {
         Circle circle;
     };
     
+    // Enum
     enum ShapeType {
         CIRCLE_TYPE,
         RECTANGLE_TYPE,
         TRIANGLE_TYPE
     };
     
+    // Union with enum discriminator
     union ShapeValue switch (ShapeType) {
         case CIRCLE_TYPE: Circle circle;
         case RECTANGLE_TYPE: Rectangle rectangle;
+        default: string description;
+    };
+    
+    // Union with integer discriminator
+    union IntShapeValue switch (long) {
+        case 1: Circle circle;
+        case 2: Rectangle rectangle;
         default: string description;
     };
     
@@ -59,5 +101,20 @@ module Shapes {
     struct UnionHolder {
         CommonTypedefs2::BaseUnionAlias unionField;
         CommonUnions::ExtendedUnion extendedUnion;
+    };
+    
+    // Struct with enum field
+    struct ColoredShape {
+        @key long id;
+        ShapeType shapeType;
+        string color;
+        CommonEnums::Flags flags;
+    };
+    
+    // Struct with bitmask field
+    struct FlagsHolder {
+        @key long id;
+        CommonEnums::Flags readFlags;
+        CommonEnums::Flags writeFlags;
     };
 };

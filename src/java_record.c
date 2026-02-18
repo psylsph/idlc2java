@@ -37,9 +37,9 @@ static const char *get_member_name(const idl_member_t *member) {
 }
 
 static idl_type_t resolve_typedef_type(const idl_type_spec_t *type_spec) {
-    // Use idl_unalias to resolve typedefs to their base type
-    const idl_type_spec_t *unaliased = idl_unalias(type_spec);
-    return idl_type(unaliased);
+    if (!type_spec) return 0;
+    // Use idl_type directly instead of idl_unalias to avoid accessing freed memory
+    return idl_type(type_spec);
 }
 
 static const char *dynamic_type_kind(idl_type_t type) {

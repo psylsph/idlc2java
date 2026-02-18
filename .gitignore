@@ -31,6 +31,7 @@ Makefile
 *.out
 *.app
 run_tests
+vgcore.*
 
 # Editor/IDE files
 .vscode/

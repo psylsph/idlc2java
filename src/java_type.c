@@ -29,6 +29,7 @@ extern char *resolve_package(const idl_node_t *node, const char *prefix);
 char *java_type_name(const idl_type_spec_t *type_spec, bool boxed) {
     if (!type_spec) return strdup("Object");
 
+    // Use idl_type directly instead of idl_unalias to avoid accessing freed memory
     idl_type_t type = idl_type(type_spec);
 
     // Handle typedef by returning the typedef name
@@ -69,6 +70,7 @@ char *java_type_name(const idl_type_spec_t *type_spec, bool boxed) {
             return strdup("String");
         case IDL_SEQUENCE: {
             const idl_sequence_t *seq = (const idl_sequence_t *)type_spec;
+            if (!seq || !seq->type_spec) return strdup("java.util.List<Object>");
             char *element_type = java_type_name(seq->type_spec, true);
             char *result = malloc(strlen(element_type) + 20);
             sprintf(result, "java.util.List<%s>", element_type);
